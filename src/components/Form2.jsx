@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const Form2 = ({setEmployee}) => {
+const Form2 = ({setEmployee,editemp,seteditemp}) => {
 
   const [user,setUser]=useState({
     name:"",
@@ -13,9 +13,41 @@ const Form2 = ({setEmployee}) => {
     setUser({...user,[e.target.name]:e.target.value})
   }
 
+  useEffect(()=>{
+    if(editemp){
+      setUser(editemp)
+    }
+  },[editemp])
+
   const handleSubmit = (e)=>{
     e.preventDefault()
-    setEmployee(prev =>[...prev,user])
+
+    if(editemp){
+   setEmployee(prev =>{
+    let updatelist=[]
+
+    for(let item of prev){
+      if(item.id == editemp.id){
+        updatelist.push(user)
+      }
+      else{
+        updatelist.push(item)
+      }
+    }
+    return updatelist
+   })
+   
+
+    }
+    else{
+
+      const emp={
+        id:Date.now(),
+        ...user
+      }
+      setEmployee(prev =>[...prev,emp])
+    }
+    seteditemp(null)
     setUser({
     name:"",
     email:"",
@@ -24,7 +56,7 @@ const Form2 = ({setEmployee}) => {
   })
   }
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 flex justify-center items-center">
+    <div className="py-10 bg-white dark:bg-gray-900 flex justify-center items-center">
   
       <form className="w-full max-w-xl mx-auto bg-gray-800 p-8 rounded-xl " onSubmit={handleSubmit}>
         <h1 className="text-3xl font-semibold text-white text-center mb-10">Form validation</h1>
@@ -66,7 +98,7 @@ const Form2 = ({setEmployee}) => {
 
    <div className="text-center">
    <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-    Submit
+    {editemp ?"Update" : "Submit"}
   </button>
  </div>
      </form>
