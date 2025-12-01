@@ -1,107 +1,191 @@
 import React, { useEffect, useState } from "react";
 
-const Form2 = ({setEmployee,editemp,seteditemp}) => {
+const Form2 = ({ setEmployee, editemp, seteditemp }) => {
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    salary: "",
+    department: "",
+  });
 
-  const [user,setUser]=useState({
-    name:"",
-    email:"",
-    salary:"",
-    department:""
-  })
+  const [err, setErr] = useState({}); // <-- error state
 
-  const handleChange = (e)=>{
-    setUser({...user,[e.target.name]:e.target.value})
-  }
+  const handleChange = (e) => {
+    setUser({ ...user, [e.target.name]: e.target.value });
 
-  useEffect(()=>{
-    if(editemp){
-      setUser(editemp)
+    // remove error on typing
+    setErr({ ...err, [e.target.name + "Error"]: "" });
+  };
+
+  useEffect(() => {
+    if (editemp) {
+      setUser(editemp);
+      setErr({}); // clear errors while editing
     }
-  },[editemp])
+  }, [editemp]);
 
-  const handleSubmit = (e)=>{
-    e.preventDefault()
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-    if(editemp){
-   setEmployee(prev =>{
-    let updatelist=[]
+    // ------------------------
+    // 🔥 VALIDATION START HERE
+    // ------------------------
 
-    for(let item of prev){
-      if(item.id == editemp.id){
-        updatelist.push(user)
-      }
-      else{
-        updatelist.push(item)
-      }
+    const errObj = {};
+
+    const emailRegex =
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (user.name.trim() === "") {
+      errObj.nameError = "Please Enter Name";
     }
-    return updatelist
-   })
-   
-
+    if (user.email.trim() === "" || !emailRegex.test(user.email)) {
+      errObj.emailError = "Please Enter Valid Email";
     }
-    else{
-
-      const emp={
-        id:Date.now(),
-        ...user
-      }
-      setEmployee(prev =>[...prev,emp])
+    if (user.salary.trim() === "" || isNaN(user.salary)) {
+      errObj.salaryError = "Please Enter Valid Salary";
     }
-    seteditemp(null)
+    if (user.department === "") {
+      errObj.departmentError = "Please Select Department";
+    }
+
+    setErr(errObj);
+
+    // stop form if any error exists
+    if (Object.keys(errObj).length > 0) {
+      return;
+    }
+
+    // ------------------------
+    // 🔥 EDIT LOGIC
+    // ------------------------
+    if (editemp) {
+      setEmployee((prev) => {
+        let updated = [];
+
+        for (let item of prev) {
+          if (item.id === editemp.id) {
+            updated.push({ ...user, id: editemp.id });
+          } else {
+            updated.push(item);
+          }
+        }
+
+        return updated;
+      });
+    } else {
+      // ------------------------
+      // 🔥 ADD LOGIC
+      // ------------------------
+      const emp = {
+        id: Date.now(),
+        ...user,
+      };
+      setEmployee((prev) => [...prev, emp]);
+    }
+
+    seteditemp(null);
+
+    // reset form
     setUser({
-    name:"",
-    email:"",
-    salary:"",
-    department:""
-  })
-  }
+      name: "",
+      email: "",
+      salary: "",
+      department: "",
+    });
+  };
+
   return (
     <div className="py-10 bg-white dark:bg-gray-900 flex justify-center items-center">
-  
-      <form className="w-full max-w-xl mx-auto bg-gray-800 p-8 rounded-xl " onSubmit={handleSubmit}>
-        <h1 className="text-3xl font-semibold text-white text-center mb-10">Form validation</h1>
-    
-    <div className="grid lg:grid-cols-2 gap-4">
-         <div className="mb-5">
-    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-      Name
-    </label>
-    <input type="name" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Please Enter Name" required  name="name" value={user.name} onChange={handleChange}/>
-     </div>
-     <div className="mb-5">
-    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-      Email
-    </label>
-    <input type="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" name="email" value={user.email} onChange={handleChange} placeholder="Email"/>
-     
-    </div>
-   
-     <div className="mb-5">
-    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-      Salary
-    </label>
-    <input type="number" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" name="salary" value={user.salary} onChange={handleChange} placeholder="Salary"/>
-    </div>
-     <div className="mb-5">
-      <label htmlFor="department" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Department</label>
-  <select id="department" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 " name="department" value={user.department} onChange={handleChange}>
-    <option>Please Select Department</option>
-    <option value="IT">IT</option>
-    <option value="Finance">Finance</option>
-    <option value="Marketing">Marketing</option>
-    <option value="HR">HR</option>
-  </select>
-     
-     </div>
+      <form
+        className="w-full max-w-xl mx-auto bg-gray-800 p-8 rounded-xl"
+        onSubmit={handleSubmit}
+        noValidate
+      >
+        <h1 className="text-3xl font-semibold text-white text-center mb-10">
+          Form validation
+        </h1>
 
-    </div>
+        <div className="grid lg:grid-cols-2 gap-4">
+          {/* NAME */}
+          <div className="mb-5">
+            <label className="block mb-2 text-sm font-medium text-white">
+              Name
+            </label>
+            <input
+              type="text"
+              className="bg-gray-50 border border-gray-300 text-black p-2.5 w-full rounded-lg"
+              placeholder="Please Enter Name"
+              name="name"
+              value={user.name}
+              onChange={handleChange}
+            />
+            <p className="text-red-400 text-sm">{err.nameError}</p>
+          </div>
 
-   <div className="text-center">
-   <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-    {editemp ?"Update" : "Submit"}
-  </button>
- </div>
-     </form>
+          {/* EMAIL */}
+          <div className="mb-5">
+            <label className="block mb-2 text-sm font-medium text-white">
+              Email
+            </label>
+            <input
+              type="email"
+              className="bg-gray-50 border border-gray-300 text-black p-2.5 w-full rounded-lg"
+              placeholder="Email"
+              name="email"
+              value={user.email}
+              onChange={handleChange}
+            />
+            <p className="text-red-400 text-sm">{err.emailError}</p>
+          </div>
+
+          {/* SALARY */}
+          <div className="mb-5">
+            <label className="block mb-2 text-sm font-medium text-white">
+              Salary
+            </label>
+            <input
+              type="number"
+              className="bg-gray-50 border border-gray-300 text-black p-2.5 w-full rounded-lg"
+              placeholder="Salary"
+              name="salary"
+              value={user.salary}
+              onChange={handleChange}
+            />
+            <p className="text-red-400 text-sm">{err.salaryError}</p>
+          </div>
+
+          {/* DEPARTMENT */}
+          <div className="mb-5">
+            <label className="block mb-2 text-sm font-medium text-white">
+              Department
+            </label>
+            <select
+              className="bg-gray-50 border border-gray-300 text-black p-2.5 w-full rounded-lg"
+              name="department"
+              value={user.department}
+              onChange={handleChange}
+            >
+              <option value="">Please Select Department</option>
+              <option value="IT">IT</option>
+              <option value="Finance">Finance</option>
+              <option value="Marketing">Marketing</option>
+              <option value="HR">HR</option>
+            </select>
+            <p className="text-red-400 text-sm">{err.departmentError}</p>
+          </div>
+        </div>
+
+        {/* BUTTON */}
+        <div className="text-center">
+          <button
+            type="submit"
+            className="text-white bg-blue-700 hover:bg-blue-800 px-5 py-2.5 rounded-lg"
+          >
+            {editemp ? "Update" : "Submit"}
+          </button>
+        </div>
+      </form>
     </div>
   );
 };
