@@ -13,6 +13,8 @@ function App() {
       return curEle.id !== id
     })
 
+    const [data,setData]=useState([])
+
     setEmployee(updateemployess)
   }
    const editemployee = (id)=>{
