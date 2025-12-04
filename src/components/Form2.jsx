@@ -18,7 +18,7 @@ const Form2 = ({ setEmployee, editemp, seteditemp }) => {
   };
 
   useEffect(() => {
-    if (editemp) {
+    if (editemp) { 
       setUser(editemp);
       setErr({}); // clear errors while editing
     }
