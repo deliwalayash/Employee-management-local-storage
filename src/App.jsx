@@ -20,6 +20,7 @@ function App() {
     const foundEmployee=employee.filter((curEle)=>{
         return curEle.name.toLowerCase().includes(search.toLowerCase())
     })
+    
 
     let finalEmloyess=[...foundEmployee]
 
