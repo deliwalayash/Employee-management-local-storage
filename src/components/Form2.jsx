@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 
-const Form2 = ({ setEmployee, editemp, seteditemp }) => {
+import { toast } from "react-toastify";
+
+
+const Form2 = ({ setEmployee, editemp, seteditemp,updataEmployee }) => {
   const [user, setUser] = useState({
     name: "",
     email: "",
@@ -51,37 +54,23 @@ const Form2 = ({ setEmployee, editemp, seteditemp }) => {
 
     setErr(errObj);
 
-    // stop form if any error exists
     if (Object.keys(errObj).length > 0) {
       return;
     }
 
-    // ------------------------
-    // 🔥 EDIT LOGIC
-    // ------------------------
     if (editemp) {
-      setEmployee((prev) => {
-        let updated = [];
+      updataEmployee(user)
+      toast.success("Employee Updated Successfully!");
 
-        for (let item of prev) {
-          if (item.id === editemp.id) {
-            updated.push({ ...user, id: editemp.id });
-          } else {
-            updated.push(item);
-          }
-        }
-
-        return updated;
-      });
     } else {
-      // ------------------------
-      // 🔥 ADD LOGIC
-      // ------------------------
+    
       const emp = {
         id: Date.now(),
         ...user,
       };
       setEmployee((prev) => [...prev, emp]);
+      toast.success("Employee Added Successfully!");
+
     }
 
     seteditemp(null);

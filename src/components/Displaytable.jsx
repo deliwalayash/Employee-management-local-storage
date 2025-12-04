@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Displaytable = ({employee,deleteemployee,editemployee}) => {
+const Displaytable = ({employee,deleteemployee,editemployee,foundEmployee}) => {
   return (
     <div className=''>
         

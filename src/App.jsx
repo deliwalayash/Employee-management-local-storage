@@ -3,36 +3,35 @@ import Form2 from './components/Form2'
 
 import './App.css'
 import Displaytable from './components/Displaytable'
+import { toast,ToastContainer } from 'react-toastify'
+import Swal from "sweetalert2";
+import Controls from './components/Controls'
+
 
 function App() {
-  const [employee, setEmployee] = useState(JSON.parse(localStorage.getItem("employee")) || [])
-  const [editemp, seteditemp] = useState(null)
+  const [employee,setEmployee]=useState(JSON.parse(localStorage.getItem("employee") )|| [])
+  const [editemp,seteditemp]=useState(null)
 
-  const deleteemployee = (id) => {
-    const updateemployess = employee.filter((curEle) => {
+  const deleteemployee=(id)=>{
+    const updateemployess=employee.filter((curEle)=>{
       return curEle.id !== id
     })
 
     setEmployee(updateemployess)
   }
-  const editemployee = (id) => {
-    const findemp = employee.find((curEle) => {
+   const editemployee = (id)=>{
+    const findemp= employee.find((curEle)=>{
       return curEle.id == id
     })
     seteditemp(findemp)
-  }
-
-  const updateEmployee = () => {
-    
-  }
-
-  useEffect(() => {
-    localStorage.setItem("employee", JSON.stringify(employee))
-  }, [employee])
+   }
+  useEffect(()=>{
+    localStorage.setItem("employee",JSON.stringify(employee))
+  },[employee])
   return (
     <>
-      <Form2 setEmployee={setEmployee} editemp={editemp} seteditemp={seteditemp}></Form2>
-      <Displaytable employee={employee} deleteemployee={deleteemployee} editemployee={editemployee}></Displaytable>
+  <Form2 setEmployee={setEmployee} editemp={editemp} seteditemp={seteditemp}></Form2>
+    <Displaytable employee={employee} deleteemployee={deleteemployee} editemployee={editemployee}></Displaytable>
     </>
   )
 }
