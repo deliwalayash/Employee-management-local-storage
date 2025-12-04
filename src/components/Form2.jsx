@@ -21,7 +21,7 @@ const Form2 = ({ setEmployee, editemp, seteditemp,updataEmployee }) => {
   };
 
   useEffect(() => {
-    if (editemp) {
+    if (editemp) { 
       setUser(editemp);
       setErr({}); // clear errors while editing
     }

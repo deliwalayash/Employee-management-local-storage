@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import Form2 from './components/Form2'
- 
+
 import './App.css'
 import Displaytable from './components/Displaytable'
 import { toast,ToastContainer } from 'react-toastify'
@@ -11,95 +11,28 @@ import Controls from './components/Controls'
 function App() {
   const [employee,setEmployee]=useState(JSON.parse(localStorage.getItem("employee") )|| [])
   const [editemp,seteditemp]=useState(null)
-  const [search,setSearch]=useState("")
-  const [sortOrder,setSortorder]=useState("")
-  const [searchDepartment,setSearchDepartment]=useState("")
 
-
-
-    const foundEmployee=employee.filter((curEle)=>{
-        return curEle.name.toLowerCase().includes(search.toLowerCase())
+  const deleteemployee=(id)=>{
+    const updateemployess=employee.filter((curEle)=>{
+      return curEle.id !== id
     })
     
 
-    let finalEmloyess=[...foundEmployee]
-
-    if(sortOrder == "asc"){
-      finalEmloyess.sort((a,b)=>{return b.salary-a.salary})
-    }
-    else if(sortOrder == "des"){
-        finalEmloyess.sort((a,b)=>{return a.salary -b.salary})
-    }
-
-   if(searchDepartment !== ""){
-     finalEmloyess=finalEmloyess.filter((curEle)=>{
-        return curEle.department == searchDepartment
-    })
-   }
-
-   if (searchDepartment !== "" && finalEmloyess.length === 0) {
-  Swal.fire("Oops!", "No members found in this department", "info");
-}
-
-
-  
-
-
-
-
-  const deleteemployee = (id) => {
-
-  Swal.fire({
-    title: "Are you sure?",
-    text: "This action cannot be undone!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, delete it!"
-  }).then((result) => {
-
-    if (result.isConfirmed) {
-      // your delete logic here
-      const updated = employee.filter((curEle) => curEle.id !== id);
-      setEmployee(updated);
-
-
-      Swal.fire("Deleted!", "Employee has been removed.", "success");
-    }
-
-  });
-
-};
-
-
-  
+    setEmployee(updateemployess)
+  }
    const editemployee = (id)=>{
     const findemp= employee.find((curEle)=>{
       return curEle.id == id
     })
     seteditemp(findemp)
    }
-
-   const updataEmployee = (data)=>{
-    const updataData = employee.map((curEle)=>{
-      return curEle.id == data.id ? data : curEle
-    })
-    setEmployee(updataData)
-   }
-
-   
   useEffect(()=>{
     localStorage.setItem("employee",JSON.stringify(employee))
   },[employee])
   return (
     <>
-    
-
-  <Form2 setEmployee={setEmployee} editemp={editemp} seteditemp={seteditemp} updataEmployee={updataEmployee}></Form2>
-  <Controls setSearch={setSearch} setSortorder={setSortorder} setSearchDepartment={setSearchDepartment}></Controls>
-    <Displaytable employee={finalEmloyess} deleteemployee={deleteemployee} editemployee={editemployee} ></Displaytable>
-      <ToastContainer position="top-right" />
+  <Form2 setEmployee={setEmployee} editemp={editemp} seteditemp={seteditemp}></Form2>
+    <Displaytable employee={employee} deleteemployee={deleteemployee} editemployee={editemployee}></Displaytable>
     </>
   )
 }
