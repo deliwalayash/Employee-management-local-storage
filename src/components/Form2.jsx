@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 
-const Form2 = ({ setEmployee, editemp, seteditemp,updataEmployee }) => {
+const Form2 = ({ setEmployee, editemp, seteditemp,updateEmployee }) => {
   const [user, setUser] = useState({
     name: "",
     email: "",
@@ -59,7 +59,7 @@ const Form2 = ({ setEmployee, editemp, seteditemp,updataEmployee }) => {
     }
 
     if (editemp) {
-      updataEmployee(user)
+      updateEmployee(user)
       toast.success("Employee Updated Successfully!");
 
     } else {
