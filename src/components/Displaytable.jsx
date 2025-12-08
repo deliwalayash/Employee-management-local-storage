@@ -1,64 +1,61 @@
 import React from 'react'
 
-const Displaytable = ({employee,deleteemployee,editemployee,foundEmployee}) => {
-  return (
-    <div className=''>
-        
+const Displaytable = ({ employee, deleteemployee, editemployee }) => {
 
-<div className="relative overflow-x-auto shadow-md sm:rounded-lg container mx-auto ">
-  <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-      <tr>
-        <th scope="col" className="px-6 py-3">
-          Name
-        </th>
-        <th scope="col" className="px-6 py-3">
-          Email
-        </th>
-        <th scope="col" className="px-6 py-3">
-          Salary
-        </th>
-        <th scope="col" className="px-6 py-3">
-          Department
-        </th>
-        <th scope="col" className="px-6 py-3">
-          Action
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-{
-  employee.map((curEle)=>{
-    return (
-      <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200" key={curEle.id}>
-        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-          {curEle.name}
-        </th>
-        <td className="px-6 py-4">
-          {curEle.email}
-        </td>
-        <td className="px-6 py-4">
-          {curEle.salary}
-        </td>
-        <td className="px-6 py-4">
-          {curEle.department}
-        </td>
-        <td className="px-6 py-4">
-          <button className='p-3 bg-red-800 text-white border-rose-800 border border-1 rounded' onClick={()=>{deleteemployee(curEle.id)}}>Delete</button>
-          <button className='ms-4 py-3 px-5 bg-green-800 text-white border-green-600 border border-1 rounded' onClick={()=>{editemployee(curEle.id)}}>Edit</button>
-        </td>
-      </tr>
-    )
-  })
+  const stars= (rating)=>{
+    return ("⭐".repeat(rating))
   }
-    </tbody>
-  </table>
-</div>
+  return (
+    <div className="container mx-auto">
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+          <thead className="text-xs text-black uppercase font-semibold bg-gray-50 text-center">
+            <tr>
+              <th className="px-6 py-3">Name</th>
+              <th className="px-6 py-3">Email</th>
+              <th className="px-6 py-3">Salary</th>
+              <th className="px-6 py-3">Department</th>
+              <th className="px-6 py-3">Gender</th>
+              <th className="px-6 py-3">Skills</th>
+              <th className="px-6 py-3">Rating</th>
+              <th className="px-6 py-3">Mobile</th>
+              <th className="px-6 py-3">Action</th>
+            </tr>
+          </thead>
 
+          <tbody>
+            {employee.map((curEle) => (
+              <tr className="bg-white border-b dark:bg-gray-800 text-white text-center" key={curEle.id}>
+                <td className="px-6 py-4">{curEle.name}</td>
+                <td className="px-6 py-4">{curEle.email}</td>
+                <td className="px-6 py-4">{curEle.salary}</td>
+                <td className="px-6 py-4">{curEle.department}</td>
+                <td className="px-6 py-4">{curEle.gender}</td>
+                <td className="px-6 py-4">{curEle.skills.join(", ")}</td>
+                <td className="px-6 py-4">{stars(curEle.rating)}</td>
+                <td className="px-6 py-4">{curEle.mobile}</td>
+                <td className="px-6 py-4">
+                  <button
+                    className="p-2 bg-red-700 text-white rounded"
+                    onClick={() => deleteemployee(curEle.id)}
+                  >
+                    Delete
+                  </button>
+                  <button
+                    className="ms-4 p-2 bg-green-700 text-white rounded"
+                    onClick={() => editemployee(curEle.id)}
+                  >
+                    Edit
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
 
-
+        </table>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Displaytable
+export default Displaytable;
