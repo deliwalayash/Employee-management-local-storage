@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Controls = ({setSearch,setSortorder,setSearchDepartment}) => {
+const Controls = ({setSearch,setSortorder,setSearchDepartment,exportToPDF}) => {
   return (
     <>
 <div className="container mx-auto my-6 ">
@@ -45,6 +45,13 @@ const Controls = ({setSearch,setSortorder,setSearchDepartment}) => {
       <option value="Marketing">Marketing</option>
       <option value="HR">HR</option>
     </select>
+     <button
+      type="button"
+      className="text-white bg-red-700 hover:bg-red-800 px-4 py-2 rounded-lg text-sm"
+       onClick={()=>{exportToPDF()}}
+    >
+      Export to PDF
+    </button>
 
   </div>
 </div>

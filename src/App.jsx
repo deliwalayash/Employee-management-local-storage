@@ -5,6 +5,8 @@ import Controls from "./components/Controls";
 import { ToastContainer } from "react-toastify";
 import Swal from "sweetalert2";
 import dummyEmployee from "./components/dummyemployees";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 import "./App.css";
 
@@ -25,6 +27,37 @@ function App() {
   const [search, setSearch] = useState("");
   const [sortOrder, setSortorder] = useState("");
   const [searchDepartment, setSearchDepartment] = useState("");
+
+
+   //Save to PDF LOGIC
+  const exportToPDF = () => {
+  const doc = new jsPDF();
+  const now=new Date()
+  const date=now.toLocaleDateString()
+  const time=now.toLocaleTimeString()
+  
+  doc.text(`${date},${time}`,14,10)
+
+  doc.text("Employee List", 14, 22);
+
+  autoTable(doc,{
+    startY: 25,
+    head: [["No","Name", "Email", "Salary", "Dep","Gender","Skills","Ratings","Mobile"]],
+    body: employee.map((emp,idx) => [
+      idx+1,
+      emp.name,
+      emp.email,
+      emp.salary,
+      emp.department,
+      emp.gender,
+      emp.skills,
+      emp.rating,
+      emp.mobile
+    ]),
+  });
+
+  doc.save("employees.pdf");
+};
 
   // ---------------- SEARCH FILTER ----------------
   const foundEmployee = employee.filter((curEle) => {
@@ -103,6 +136,7 @@ function App() {
         setSearch={setSearch}
         setSortorder={setSortorder}
         setSearchDepartment={setSearchDepartment}
+        exportToPDF={exportToPDF}
       />
 
       <Displaytable

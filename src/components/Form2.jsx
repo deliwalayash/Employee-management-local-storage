@@ -96,7 +96,7 @@ const Form2 = ({ setEmployee, editemp, seteditemp, updateEmployee }) => {
         noValidate
       >
         <h1 className="text-3xl font-semibold text-white text-center mb-10">
-          Form Validation
+          Employee Management System
         </h1>
 
         <div className="grid lg:grid-cols-2 gap-4">
